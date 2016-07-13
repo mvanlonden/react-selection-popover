@@ -61,10 +61,8 @@ class SelectionPopover extends Component {
 
   _handleMouseUp = (e) => {
     e.stopPropagation()
-    console.log(1);
     const selection = document.getSelection()
     if (selection.toString().length) {
-      console.log(2);
       const selectionBox = selection.getRangeAt(0).getBoundingClientRect()
       this.setState({
         selectionBox,
