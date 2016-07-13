@@ -1,4 +1,5 @@
-# react-selection-popover - Popover menu for selected text
+# react-selection-popover
+Popover menu for selected text
 
 ## Getting started
 
@@ -30,6 +31,10 @@ Clone repo then
 npm install
 npm start
 ```
+
+### TODO
+- add tests
+- disable user selection for children of popover
 
 ## License
 

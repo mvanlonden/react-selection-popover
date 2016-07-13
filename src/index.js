@@ -46,10 +46,17 @@ class SelectionPopover extends Component {
           ...style
         }}
         {...otherProps}
+        onClick={this._handlePopoverClick}
       >
         {children}
       </div>
     )
+  }
+
+  _handlePopoverClick = () => {
+    this.setState({
+      showPopover: false
+    })
   }
 
   _handleMouseUp = (e) => {
