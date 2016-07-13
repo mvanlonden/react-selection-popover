@@ -1,6 +1,35 @@
-[![build status](https://secure.travis-ci.org/mvanlonden/react-selection-popover.svg)](http://travis-ci.org/mvanlonden/react-selection-popover) [![bitHound Score](https://www.bithound.io/github/mvanlonden/react-selection-popover/badges/score.svg)](https://www.bithound.io/github/mvanlonden/react-selection-popover) [![Dependency Status](https://david-dm.org/mvanlonden/react-selection-popover.svg)](https://david-dm.org/mvanlonden/react-selection-popover)
 # react-selection-popover - Popover menu for selected text
 
+## Getting started
+
+Add the `SelectionPopover` component to the div that contains the selectable text. Add the `data-selectable` attribute to the same div.
+
+Add any children and props (including styling) to `SelectionPopover`.
+```js
+  import React from 'react';
+  import SelectionPopover from 'react-selection-popover'
+
+  export default class Demo extends React.Component {
+    render() {
+      return (
+        <div data-selectable>
+          I am selectable text!
+          <SelectionPopover>
+            <button>save</button>
+            <button>share</button>
+          </SelectionPopover>
+        </div>
+      )
+    }
+  }
+```
+
+## Contributing
+Clone repo then
+```sh
+npm install
+npm start
+```
 
 ## License
 
