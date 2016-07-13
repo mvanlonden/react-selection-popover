@@ -26,8 +26,9 @@ Add any children and props (including styling) to `SelectionPopover`.
 ```
 
 ## Contributing
+
 Clone repo then
-```sh
+```js
 npm install
 npm start
 ```

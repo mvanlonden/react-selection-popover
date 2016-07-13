@@ -96,8 +96,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	    _this._handleMouseUp = function (e) {
 	      e.stopPropagation();
+	      console.log(1);
 	      var selection = document.getSelection();
 	      if (selection.toString().length) {
+	        console.log(2);
 	        var selectionBox = selection.getRangeAt(0).getBoundingClientRect();
 	        _this.setState({
 	          selectionBox: selectionBox,
@@ -188,7 +190,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}(_react.Component);
 	
 	SelectionPopover.propTypes = {
-	  children: _react.PropTypes.array.isRequired,
+	  children: _react.PropTypes.node.isRequired,
 	  style: _react.PropTypes.object,
 	  topOffset: _react.PropTypes.number
 	};

@@ -61,8 +61,10 @@ class SelectionPopover extends Component {
 
   _handleMouseUp = (e) => {
     e.stopPropagation()
+    console.log(1);
     const selection = document.getSelection()
     if (selection.toString().length) {
+      console.log(2);
       const selectionBox = selection.getRangeAt(0).getBoundingClientRect()
       this.setState({
         selectionBox,
@@ -87,7 +89,7 @@ class SelectionPopover extends Component {
 }
 
 SelectionPopover.propTypes = {
-  children: PropTypes.array.isRequired,
+  children: PropTypes.node.isRequired,
   style: PropTypes.object,
   topOffset: PropTypes.number
 }
