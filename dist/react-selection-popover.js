@@ -89,37 +89,37 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(SelectionPopover).call(this, props));
 	
 	    _this._handlePopoverClick = function () {
-	      _this.setState({
-	        showPopover: false
-	      });
+	      var showPopover = false;
+	      _this.setState({ showPopover: showPopover });
+	      _this.props.onChange({ showPopover: showPopover });
 	    };
 	
 	    _this._handleMouseUp = function (e) {
 	      e.stopPropagation();
-	      console.log(1);
 	      var selection = document.getSelection();
 	      if (selection.toString().length) {
-	        console.log(2);
 	        var selectionBox = selection.getRangeAt(0).getBoundingClientRect();
+	        var showPopover = true;
 	        _this.setState({
 	          selectionBox: selectionBox,
 	          popoverBox: {
 	            width: _this.refs.selectionPopover.getBoundingClientRect().width,
 	            height: _this.refs.selectionPopover.getBoundingClientRect().height
 	          },
-	          showPopover: true
+	          showPopover: showPopover
 	        });
+	        _this.props.onChange({ showPopover: showPopover });
 	      } else {
-	        _this.setState({
-	          showPopover: false
-	        });
+	        var _showPopover = false;
+	        _this.setState({ showPopover: _showPopover });
+	        _this.props.onChange({ showPopover: _showPopover });
 	      }
 	    };
 	
 	    _this._handleWindowMouseUp = function () {
-	      _this.setState({
-	        showPopover: false
-	      });
+	      var showPopover = false;
+	      _this.setState({ showPopover: showPopover });
+	      _this.props.onChange({ showPopover: showPopover });
 	    };
 	
 	    _this.state = {
@@ -192,7 +192,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	SelectionPopover.propTypes = {
 	  children: _react.PropTypes.node.isRequired,
 	  style: _react.PropTypes.object,
-	  topOffset: _react.PropTypes.number
+	  topOffset: _react.PropTypes.number,
+	  onChange: _react.PropTypes.function
 	};
 	
 	SelectionPopover.defaultProps = {

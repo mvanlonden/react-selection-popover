@@ -25,6 +25,15 @@ Add any children and props (including styling) to `SelectionPopover`.
   }
 ```
 
+## Props
+| prop          | description   | type     |
+| ------------- |-------------| --------|
+| `onChange`    | fired when visibility of popover changes | function |
+| `topOffset`   | distance from selection and top of box (default 30px)   | integer  |
+| `style`       | any ole style prop      |    object |
+You can pass any other `div` compatible props
+
+
 ## Contributing
 
 Clone repo then

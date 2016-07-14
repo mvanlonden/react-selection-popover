@@ -54,9 +54,9 @@ class SelectionPopover extends Component {
   }
 
   _handlePopoverClick = () => {
-    this.setState({
-      showPopover: false
-    })
+    const showPopover = false
+    this.setState({showPopover})
+    this.props.onChange({showPopover})
   }
 
   _handleMouseUp = (e) => {
@@ -64,32 +64,35 @@ class SelectionPopover extends Component {
     const selection = document.getSelection()
     if (selection.toString().length) {
       const selectionBox = selection.getRangeAt(0).getBoundingClientRect()
+      const showPopover = true
       this.setState({
         selectionBox,
         popoverBox: {
           width: this.refs.selectionPopover.getBoundingClientRect().width,
           height: this.refs.selectionPopover.getBoundingClientRect().height
         },
-        showPopover: true
+        showPopover
       })
+      this.props.onChange({showPopover})
     } else {
-      this.setState({
-        showPopover: false
-      })
+      const showPopover = false
+      this.setState({showPopover})
+      this.props.onChange({showPopover})
     }
   }
 
   _handleWindowMouseUp = () => {
-    this.setState({
-      showPopover: false
-    })
+    const showPopover = false
+    this.setState({showPopover})
+    this.props.onChange({showPopover})
   }
 }
 
 SelectionPopover.propTypes = {
   children: PropTypes.node.isRequired,
   style: PropTypes.object,
-  topOffset: PropTypes.number
+  topOffset: PropTypes.number,
+  onChange: PropTypes.function
 }
 
 SelectionPopover.defaultProps = {
