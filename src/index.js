@@ -92,7 +92,7 @@ SelectionPopover.propTypes = {
   children: PropTypes.node.isRequired,
   style: PropTypes.object,
   topOffset: PropTypes.number,
-  onChange: PropTypes.function
+  onChange: PropTypes.func
 }
 
 SelectionPopover.defaultProps = {

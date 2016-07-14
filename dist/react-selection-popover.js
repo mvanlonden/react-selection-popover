@@ -193,7 +193,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	  children: _react.PropTypes.node.isRequired,
 	  style: _react.PropTypes.object,
 	  topOffset: _react.PropTypes.number,
-	  onChange: _react.PropTypes.function
+	  onChange: _react.PropTypes.func
 	};
 	
 	SelectionPopover.defaultProps = {
