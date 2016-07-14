@@ -3,26 +3,35 @@ Popover menu for selected text
 
 ## Getting started
 
-Add the `SelectionPopover` component to the div that contains the selectable text. Add the `data-selectable` attribute to the same div.
+Add the `SelectionPopover` component as a sibling of the element that contains the selectable text. Add the `data-selectable` attribute to the element that contains the selectable text. Make sure the common parent has its `position` set to `relative`.
 
 Add any children and props (including styling) to `SelectionPopover`.
 ```js
-  import React from 'react';
-  import SelectionPopover from 'react-selection-popover'
+import React from 'react';
+import SelectionPopover from '../src'
 
-  export default class Demo extends React.Component {
-    render() {
-      return (
+export default class Demo extends React.Component {
+  render() {
+    return (
+      <div style={{
+        position: 'relative'
+      }}>
         <div data-selectable>
-          I am selectable text!
-          <SelectionPopover>
-            <button>save</button>
-            <button>share</button>
-          </SelectionPopover>
+          <p>
+            This is the first selectable paragraph. Looking pretty good.
+          </p>
+          <p>
+            Lorem ipsum dolor sit amet, consectetur adipisicing.
+          </p>
         </div>
-      )
-    }
+        <SelectionPopover>
+          <button>save</button>
+          <button>share</button>
+        </SelectionPopover>
+      </div>
+    )
   }
+}
 ```
 
 ## Props

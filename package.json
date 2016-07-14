@@ -3,7 +3,7 @@
   "description": "A medium-like popover menu for selected text",
   "author": "Melchert van Londen",
   "user": "mvanlonden",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "scripts": {
     "start": "webpack-dev-server",
     "test": "karma start",

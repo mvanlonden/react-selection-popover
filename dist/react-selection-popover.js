@@ -78,6 +78,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
+	function clearSelection() {
+	  if (window.getSelection) {
+	    window.getSelection().removeAllRanges();
+	  } else if (document.selection) {
+	    document.selection.empty();
+	  }
+	}
+	
 	// this should be the entry point to your library
 	
 	var SelectionPopover = function (_Component) {
@@ -91,47 +99,60 @@ return /******/ (function(modules) { // webpackBootstrap
 	    _this._handlePopoverClick = function () {
 	      var showPopover = false;
 	      _this.setState({ showPopover: showPopover });
-	      _this.props.onChange({ showPopover: showPopover });
+	      if (_this.props.onChange) {
+	        _this.props.onChange({ showPopover: showPopover });
+	      }
+	      clearSelection();
 	    };
 	
 	    _this._handleMouseUp = function (e) {
 	      e.stopPropagation();
 	      var selection = document.getSelection();
 	      if (selection.toString().length) {
-	        var selectionBox = selection.getRangeAt(0).getBoundingClientRect();
-	        var showPopover = true;
-	        _this.setState({
-	          selectionBox: selectionBox,
-	          popoverBox: {
-	            width: _this.refs.selectionPopover.getBoundingClientRect().width,
-	            height: _this.refs.selectionPopover.getBoundingClientRect().height
-	          },
-	          showPopover: showPopover
-	        });
-	        _this.props.onChange({ showPopover: showPopover });
+	        (function () {
+	          var selectionBox = selection.getRangeAt(0).getBoundingClientRect();
+	          var targetBox = document.querySelector('[data-selectable]').getBoundingClientRect();
+	
+	          var showPopover = true;
+	          if (_this.props.onChange) {
+	            _this.props.onChange({ showPopover: showPopover });
+	          }
+	
+	          // Nest setState so display property is set to inline-block before retrieving width and height of popover
+	          _this.setState({
+	            showPopover: showPopover
+	          }, function () {
+	            var popoverBox = _this.refs.selectionPopover.getBoundingClientRect();
+	            _this.setState({
+	              popoverBox: {
+	                top: selectionBox.top - targetBox.top - _this.props.topOffset,
+	                left: selectionBox.width / 2 - popoverBox.width / 2 + (selectionBox.left - targetBox.left)
+	              }
+	            });
+	          });
+	        })();
 	      } else {
 	        var _showPopover = false;
 	        _this.setState({ showPopover: _showPopover });
-	        _this.props.onChange({ showPopover: _showPopover });
+	        if (_this.props.onChange) {
+	          _this.props.onChange({ showPopover: _showPopover });
+	        }
 	      }
 	    };
 	
 	    _this._handleWindowMouseUp = function () {
 	      var showPopover = false;
 	      _this.setState({ showPopover: showPopover });
-	      _this.props.onChange({ showPopover: showPopover });
+	      if (_this.props.onChange) {
+	        _this.props.onChange({ showPopover: showPopover });
+	      }
 	    };
 	
 	    _this.state = {
 	      showPopover: false,
 	      popoverBox: {
-	        width: 0,
-	        height: 0
-	      },
-	      selectionBox: {
 	        top: 0,
-	        left: 0,
-	        width: 0
+	        left: 0
 	      }
 	    };
 	    return _this;
@@ -140,14 +161,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	  _createClass(SelectionPopover, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      var target = document.querySelectorAll('[data-selectable]')[0];
+	      var target = document.querySelector('[data-selectable]');
 	      target.addEventListener('mouseup', this._handleMouseUp);
 	      document.addEventListener('mouseup', this._handleWindowMouseUp);
 	    }
 	  }, {
 	    key: 'componentWillUnmount',
 	    value: function componentWillUnmount() {
-	      var target = document.querySelectorAll('[data-selectable]')[0];
+	      var target = document.querySelector('[data-selectable]');
 	      target.removeEventListener('mouseup', this._handleMouseUp);
 	      document.removeEventListener('mouseup', this._handleWindowMouseUp);
 	    }
@@ -159,14 +180,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	      var style = _props.style;
 	      var topOffset = _props.topOffset;
 	
-	      var otherProps = _objectWithoutProperties(_props, ['children', 'style', 'topOffset']);
+	      var otherProps = _objectWithoutProperties(_props, ['children', 'style', 'topOffset']); // eslint-disable-line no-unused-vars
+	
 	
 	      var _state = this.state;
 	      var showPopover = _state.showPopover;
-	      var selectionBox = _state.selectionBox;
 	      var popoverBox = _state.popoverBox;
+	      var top = popoverBox.top;
+	      var left = popoverBox.left;
 	
 	      var visibility = showPopover ? 'visible' : 'hidden';
+	      var display = showPopover ? 'inline-block' : 'none';
 	
 	      return _react2.default.createElement(
 	        'div',
@@ -174,9 +198,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	          ref: 'selectionPopover',
 	          style: _extends({
 	            visibility: visibility,
+	            display: display,
 	            position: 'absolute',
-	            top: selectionBox.top - topOffset,
-	            left: selectionBox.width / 2 - popoverBox.width / 2 + selectionBox.left
+	            top: top,
+	            left: left
 	          }, style)
 	        }, otherProps, {
 	          onClick: this._handlePopoverClick
