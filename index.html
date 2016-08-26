@@ -25,16 +25,19 @@
       <article class="pure-u-1">
         <h2>Demonstration</h2>
         <section class="demonstration">
-          <div data-reactroot="" data-reactid="1" data-react-checksum="-1901032094"><div class="right github-fork-ribbon-wrapper" data-reactid="2"><div class="github-fork-ribbon" data-reactid="3"><a href="https://github.com/mvanlonden/react-selection-popover" data-reactid="4">Fork me on GitHub</a></div></div><div style="position:relative;" data-reactid="5"><div data-selectable="true" data-reactid="6"><p data-reactid="7">This is the first selectable paragraph. Looking pretty good.</p><p data-reactid="8">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p></div><div style="visibility:hidden;display:none;position:absolute;top:0;left:0;" data-reactid="9"><button data-reactid="10">save</button><button data-reactid="11">share</button></div></div></div>
+          <div data-reactroot="" data-reactid="1" data-react-checksum="-1942647461"><div class="right github-fork-ribbon-wrapper" data-reactid="2"><div class="github-fork-ribbon" data-reactid="3"><a href="https://github.com/mvanlonden/react-selection-popover" data-reactid="4">Fork me on GitHub</a></div></div><div style="position:relative;" data-reactid="5"><div data-selectable="true" data-reactid="6"><p data-reactid="7">This is the first selectable paragraph. Looking pretty good.</p><p data-reactid="8">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p></div><div style="visibility:hidden;display:none;position:absolute;top:0;left:0;" data-reactid="9"><button data-reactid="10">like</button><button data-reactid="11">close</button></div></div></div>
         </section>
 
         <h2>Documentation</h2>
         <section class="documentation">
           <div><div><h1><span>react-selection-popover</span></h1><p><span>Popover menu for selected text</span></p><h2><span>Getting started</span></h2><p><span>Add the </span><code>SelectionPopover</code><span> component as a sibling of the element that contains the selectable text. Add the </span><code>data-selectable</code><span> attribute to the element that contains the selectable text. Make sure the common parent has its </span><code>position</code><span> set to </span><code>relative</code><span>.</span></p><p><span>Add any children and props (including styling) to </span><code>SelectionPopover</code><span>.</span></p><pre><pre class="lowlight"><code class="hljs js"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react&#x27;</span>;
-<span class="hljs-keyword">import</span> SelectionPopover <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;../src&#x27;</span>
+<span class="hljs-keyword">import</span> SelectionPopover <span class="hljs-keyword">from</span> <span class="hljs-string">&#x27;react-selection-popover&#x27;</span>
 
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">default</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">Demo</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
   render() {
+    state = {
+      showPopover: <span class="hljs-literal">false</span>
+    }
     <span class="hljs-keyword">return</span> (
       &lt;div style={{
         position: &#x27;relative&#x27;
@@ -47,7 +50,11 @@
             Lorem ipsum dolor sit amet, consectetur adipisicing.
           &lt;/p&gt;
         &lt;/div&gt;
-        &lt;SelectionPopover&gt;
+        &lt;SelectionPopover
+          showPopover={this.state.showPopover}
+          onTextSelect={() =&gt; {this.setState({showPopover: true})}}
+          onTextDeselect={() =&gt; {this.setState({showPopover: false})}}
+        &gt;
           &lt;button&gt;save&lt;/button&gt;
           &lt;button&gt;share&lt;/button&gt;
         &lt;/SelectionPopover&gt;
@@ -55,11 +62,11 @@
     )
   }
 }
-</code></pre></pre><h2><span>Props</span></h2><table><thead><tr><th><span>prop</span></th><th><span>description</span></th><th><span>type</span></th></tr></thead><tbody><tr><td><code>onChange</code></td><td><span>fired when visibility of popover changes</span></td><td><span>function</span></td></tr><tr><td><code>topOffset</code></td><td><span>distance from selection and top of box (default 30px)</span></td><td><span>integer</span></td></tr><tr><td><code>style</code></td><td><span>any ole style prop</span></td><td><span>object</span></td></tr></tbody></table><p><span>You can pass any other </span><code>div</code><span> compatible props</span></p><h2><span>Contributing</span></h2><p><span>Clone repo then</span></p><pre><pre class="lowlight"><code class="hljs js">npm install
+</code></pre></pre><h2><span>Props</span></h2><table><thead><tr><th><span>prop</span></th><th><span>description</span></th><th><span>type</span></th><th><span>required</span></th></tr></thead><tbody><tr><td><code>topOffset</code></td><td><span>distance from selection and top of box (default 30px)</span></td><td><span>integer</span></td><td><span>false</span></td></tr><tr><td><code>style</code></td><td><span>any ole style prop</span></td><td><span>object</span></td><td><span>false</span></td></tr><tr><td><code>onTextDeselect</code></td><td><span>fired when text selection is cleared</span></td><td><span>function</span></td><td><span>true</span></td></tr><tr><td><code>onTextSelect</code></td><td><span>fired when text is selected</span></td><td><span>function&lt;selectedText: string&gt;</span></td><td><span>true</span></td></tr><tr><td><code>showPopover</code></td><td><span>shows or hides the popover</span></td><td><span>boolean</span></td><td><span>true</span></td></tr></tbody></table><p><span>You can pass any other </span><code>div</code><span> compatible props</span></p><h2><span>Contributing</span></h2><p><span>Clone repo then</span></p><pre><pre class="lowlight"><code class="hljs js">npm install
 npm start
 </code></pre></pre><h3><span>TODO</span></h3><ul><li><span>add tests</span></li><li><span>disable user selection for children of popover</span></li></ul><h2><span>License</span></h2><p><em><span>react-selection-popover</span></em><span> is available under MIT. See LICENSE for more details.</span></p></div></div>
         </section>
       </article>
     </div>
-  <script type="text/javascript" src="manifest.d6dde75681b4b4b781a6.js"></script><script type="text/javascript" src="vendors.b7c3df2b528430c6ac11.js"></script><script type="text/javascript" src="style.5afc7a80e4ebe7e75d8f.js"></script><script type="text/javascript" src="app.5fce693326496fc9440b.js"></script></body>
+  <script type="text/javascript" src="manifest.308aca8ab8be5e8d484b.js"></script><script type="text/javascript" src="vendors.b7c3df2b528430c6ac11.js"></script><script type="text/javascript" src="style.5afc7a80e4ebe7e75d8f.js"></script><script type="text/javascript" src="app.932a7e7b31f33e63bbe8.js"></script></body>
 </html>
