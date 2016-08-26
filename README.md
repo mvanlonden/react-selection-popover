@@ -8,10 +8,13 @@ Add the `SelectionPopover` component as a sibling of the element that contains t
 Add any children and props (including styling) to `SelectionPopover`.
 ```js
 import React from 'react';
-import SelectionPopover from '../src'
+import SelectionPopover from 'react-selection-popover'
 
 export default class Demo extends React.Component {
   render() {
+    state = {
+      showPopover: false
+    }
     return (
       <div style={{
         position: 'relative'
@@ -24,7 +27,11 @@ export default class Demo extends React.Component {
             Lorem ipsum dolor sit amet, consectetur adipisicing.
           </p>
         </div>
-        <SelectionPopover>
+        <SelectionPopover
+          showPopover={this.state.showPopover}
+          onTextSelect={() => {this.setState({showPopover: true})}}
+          onTextDeselect={() => {this.setState({showPopover: false})}}
+        >
           <button>save</button>
           <button>share</button>
         </SelectionPopover>
@@ -35,11 +42,14 @@ export default class Demo extends React.Component {
 ```
 
 ## Props
-| prop          | description   | type     |
-| ------------- |-------------| --------|
-| `onChange`    | fired when visibility of popover changes | function |
-| `topOffset`   | distance from selection and top of box (default 30px)   | integer  |
-| `style`       | any ole style prop      |    object |
+| prop             | description                                           | type                           | required
+| -------------    | -------------                                         | --------                       | --------
+| `topOffset`      | distance from selection and top of box (default 30px) | integer                        | false
+| `style`          | any ole style prop                                    | object                         | false
+| `onTextDeselect` | fired when text selection is cleared                  | function                       | true
+| `onTextSelect`   | fired when text is selected                           | function<selectedText: string> | true
+| `showPopover`    | shows or hides the popover                            | boolean                        | true
+
 You can pass any other `div` compatible props
 
 
