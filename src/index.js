@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import onClickOutside from 'react-onclickoutside'
 
 function clearSelection() {
   if (window.getSelection) {
@@ -13,7 +14,6 @@ class SelectionPopover extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      showPopover: false,
       popoverBox: {
         top: 0,
         left: 0
@@ -21,22 +21,26 @@ class SelectionPopover extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.showPopover === true && nextProps.showPopover === false) {
+      clearSelection()
+    }
+  }
+
   componentDidMount() {
     const target = document.querySelector('[data-selectable]')
     target.addEventListener('mouseup', this._handleMouseUp)
-    document.addEventListener('mouseup', this._handleWindowMouseUp)
   }
 
   componentWillUnmount() {
     const target = document.querySelector('[data-selectable]')
     target.removeEventListener('mouseup', this._handleMouseUp)
-    document.removeEventListener('mouseup', this._handleWindowMouseUp)
   }
 
   render() {
-    const { children, style, topOffset, ...otherProps } = this.props // eslint-disable-line no-unused-vars
-    const { showPopover, popoverBox } = this.state
-    const { top, left } = popoverBox
+    const { onTextDeselect, onTextSelect, showPopover, children, style, topOffset, ...otherProps } = this.props // eslint-disable-line no-unused-vars
+    const { popoverBox: { top, left  } } = this.state
+
     const visibility = showPopover ? 'visible' : 'hidden'
     const display = showPopover ? 'inline-block' : 'none'
 
@@ -52,61 +56,37 @@ class SelectionPopover extends Component {
           ...style
         }}
         {...otherProps}
-        onClick={this._handlePopoverClick}
       >
         {children}
       </div>
     )
   }
 
-  _handlePopoverClick = () => {
-    const showPopover = false
-    this.setState({showPopover})
-    if (this.props.onChange) {
-      this.props.onChange({showPopover})
-    }
-    clearSelection()
-  }
-
-  _handleMouseUp = (e) => {
-    e.stopPropagation()
+  _handleMouseUp = () => {
     const selection = document.getSelection()
-    if (selection.toString().length) {
-      const selectionBox = selection.getRangeAt(0).getBoundingClientRect()
-      const targetBox = document.querySelector('[data-selectable]').getBoundingClientRect()
-
-      const showPopover = true
-      if (this.props.onChange) {
-        this.props.onChange({showPopover})
-      }
-
-      // Nest setState so display property is set to inline-block before retrieving width and height of popover
-      this.setState({
-        showPopover
-      }, () => {
-        const popoverBox = this.refs.selectionPopover.getBoundingClientRect()
-        this.setState({
-          popoverBox: {
-            top: (selectionBox.top - targetBox.top) - this.props.topOffset,
-            left: selectionBox.width / 2 - popoverBox.width / 2 + (selectionBox.left - targetBox.left)
-          }
-        })
-      })
+    if (!selection.toString().trim().length > 0) {
+      this.props.onTextDeselect()
     } else {
-      const showPopover = false
-      this.setState({showPopover})
-      if (this.props.onChange) {
-        this.props.onChange({showPopover})
-      }
+      this.props.onTextSelect(selection.toString())
+      this.computePopoverBox()
     }
   }
 
-  _handleWindowMouseUp = () => {
-    const showPopover = false
-    this.setState({showPopover})
-    if (this.props.onChange) {
-      this.props.onChange({showPopover})
-    }
+  computePopoverBox = () => {
+    const selection = document.getSelection()
+    const selectionBox = selection.getRangeAt(0).getBoundingClientRect()
+    const popoverBox = this.refs.selectionPopover.getBoundingClientRect()
+    const targetBox = document.querySelector('[data-selectable]').getBoundingClientRect()
+    this.setState({
+      popoverBox: {
+        top: (selectionBox.top - targetBox.top) - this.props.topOffset,
+        left: selectionBox.width / 2 - popoverBox.width / 2 + (selectionBox.left - targetBox.left)
+      }
+    })
+  }
+
+  handleClickOutside = () => {
+    this.props.onTextDeselect()
   }
 }
 
@@ -114,11 +94,13 @@ SelectionPopover.propTypes = {
   children: PropTypes.node.isRequired,
   style: PropTypes.object,
   topOffset: PropTypes.number,
-  onChange: PropTypes.func
+  onTextDeselect: PropTypes.func.isRequired,
+  onTextSelect: PropTypes.func.isRequired,
+  showPopover: PropTypes.bool.isRequired
 }
 
 SelectionPopover.defaultProps = {
   topOffset: 30
 }
 
-export default SelectionPopover
+export default onClickOutside(SelectionPopover)
