@@ -5,8 +5,9 @@ function selectionExists() {
   const selection = window.getSelection()
   return (
     selection &&
-    selection.getRangeAt(0) &&
     selection.rangeCount > 0 &&
+    selection.getRangeAt(0) &&
+    !selection.getRangeAt(0).collapsed &&
     selection.getRangeAt(0).getBoundingClientRect().width > 0 &&
     selection.getRangeAt(0).getBoundingClientRect().height > 0
   )
