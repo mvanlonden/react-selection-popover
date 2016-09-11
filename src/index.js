@@ -1,6 +1,17 @@
 import React, { Component, PropTypes } from 'react'
 import onClickOutside from 'react-onclickoutside'
 
+function selectionExists() {
+  const selection = window.getSelection()
+  return (
+    selection &&
+    selection.getRangeAt(0) &&
+    selection.rangeCount > 0 &&
+    selection.getRangeAt(0).getBoundingClientRect().width > 0 &&
+    selection.getRangeAt(0).getBoundingClientRect().height > 0
+  )
+}
+
 function clearSelection() {
   if (window.getSelection) {
     window.getSelection().removeAllRanges();
@@ -9,7 +20,6 @@ function clearSelection() {
   }
 }
 
-// this should be the entry point to your library
 class SelectionPopover extends Component {
   constructor(props) {
     super(props)
@@ -38,7 +48,7 @@ class SelectionPopover extends Component {
   }
 
   render() {
-    const { onTextDeselect, onTextSelect, showPopover, children, style, topOffset, ...otherProps } = this.props // eslint-disable-line no-unused-vars
+    const { onDeselect, onSelect, showPopover, children, style, topOffset, ...otherProps } = this.props // eslint-disable-line no-unused-vars
     const { popoverBox: { top, left  } } = this.state
 
     const visibility = showPopover ? 'visible' : 'hidden'
@@ -63,17 +73,18 @@ class SelectionPopover extends Component {
   }
 
   _handleMouseUp = () => {
-    const selection = document.getSelection()
-    if (!selection.toString().trim().length > 0) {
-      this.props.onTextDeselect()
-    } else {
-      this.props.onTextSelect(selection.toString())
-      this.computePopoverBox()
+    if (selectionExists()) {
+      this.props.onSelect()
+      return this.computePopoverBox()
     }
+    this.props.onDeselect()
   }
 
   computePopoverBox = () => {
-    const selection = document.getSelection()
+    const selection = window.getSelection()
+    if (!selectionExists()) {
+      return
+    }
     const selectionBox = selection.getRangeAt(0).getBoundingClientRect()
     const popoverBox = this.refs.selectionPopover.getBoundingClientRect()
     const targetBox = document.querySelector('[data-selectable]').getBoundingClientRect()
@@ -86,7 +97,7 @@ class SelectionPopover extends Component {
   }
 
   handleClickOutside = () => {
-    this.props.onTextDeselect()
+    this.props.onDeselect()
   }
 }
 
@@ -94,8 +105,8 @@ SelectionPopover.propTypes = {
   children: PropTypes.node.isRequired,
   style: PropTypes.object,
   topOffset: PropTypes.number,
-  onTextDeselect: PropTypes.func.isRequired,
-  onTextSelect: PropTypes.func.isRequired,
+  onDeselect: PropTypes.func.isRequired,
+  onSelect: PropTypes.func.isRequired,
   showPopover: PropTypes.bool.isRequired
 }
 
