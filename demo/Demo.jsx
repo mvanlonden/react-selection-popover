@@ -21,8 +21,8 @@ export default class Demo extends React.Component {
           </p>
         </div>
         <SelectionPopover
-          onTextDeselect={this._handleTextDeselect}
-          onTextSelect={this._handleTextSelect}
+          onDeselect={this._handleDeselect}
+          onSelect={this._handleSelect}
           showPopover={this.state.showPopover}
         >
           <button onClick={this._handleLikeButton}>{this.state.hasLiked ? 'dislike' : 'like'}</button>
@@ -39,14 +39,14 @@ export default class Demo extends React.Component {
     )
   }
 
-  _handleTextSelect = (selectedText) => {
+  _handleSelect = () => {
     this.setState({
       showPopover: true,
-      selectedText
+      selectedText: window.getSelection().toString()
     })
   }
 
-  _handleTextDeselect = () => {
+  _handleDeselect = () => {
     this.setState({
       showPopover: false
     })
