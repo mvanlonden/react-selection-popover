@@ -29,8 +29,8 @@ export default class Demo extends React.Component {
         </div>
         <SelectionPopover
           showPopover={this.state.showPopover}
-          onTextSelect={() => {this.setState({showPopover: true})}}
-          onTextDeselect={() => {this.setState({showPopover: false})}}
+          onSelect={() => {this.setState({showPopover: true})}}
+          onDeselect={() => {this.setState({showPopover: false})}}
         >
           <button>save</button>
           <button>share</button>
